@@ -1,0 +1,616 @@
+   1              	# 1 "../Project_Settings/Startup_Code/startup_MK22F51212.S"
+   1              	/* ---------------------------------------------------------------------------------------*/
+   0              	
+   0              	
+   0              	
+   2              	/*  @file:    startup_MK22F51212.s                                                        */
+   3              	/*  @purpose: CMSIS Cortex-M4 Core Device Startup File                                    */
+   4              	/*            MK22F51212                                                                  */
+   5              	/*  @version: 2.8                                                                         */
+   6              	/*  @date:    2015-2-19                                                                   */
+   7              	/*  @build:   b150223                                                                     */
+   8              	/* ---------------------------------------------------------------------------------------*/
+   9              	/*                                                                                        */
+  10              	/* Copyright (c) 1997 - 2015 , Freescale Semiconductor, Inc.                              */
+  11              	/* All rights reserved.                                                                   */
+  12              	/*                                                                                        */
+  13              	/* Redistribution and use in source and binary forms, with or without modification,       */
+  14              	/* are permitted provided that the following conditions are met:                          */
+  15              	/*                                                                                        */
+  16              	/* o Redistributions of source code must retain the above copyright notice, this list     */
+  17              	/*   of conditions and the following disclaimer.                                          */
+  18              	/*                                                                                        */
+  19              	/* o Redistributions in binary form must reproduce the above copyright notice, this       */
+  20              	/*   list of conditions and the following disclaimer in the documentation and/or          */
+  21              	/*   other materials provided with the distribution.                                      */
+  22              	/*                                                                                        */
+  23              	/* o Neither the name of Freescale Semiconductor, Inc. nor the names of its               */
+  24              	/*   contributors may be used to endorse or promote products derived from this            */
+  25              	/*   software without specific prior written permission.                                  */
+  26              	/*                                                                                        */
+  27              	/* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND        */
+  28              	/* ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED          */
+  29              	/* WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE                 */
+  30              	/* DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR       */
+  31              	/* ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES         */
+  32              	/* (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;           */
+  33              	/* LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON         */
+  34              	/* ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT                */
+  35              	/* (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS          */
+  36              	/* SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.                           */
+  37              	/*****************************************************************************/
+  38              	/* Version: GCC for ARM Embedded Processors                                  */
+  39              	/*****************************************************************************/
+  40              	    .syntax unified
+  41              	    .arch armv7-m
+  42              	
+  43              	    .section .isr_vector, "a"
+  44              	    .align 2
+  45              	    .globl __isr_vector
+  46              	__isr_vector:
+  47 0000 00000000 	    .long   __StackTop                                      /* Top of Stack */
+  48 0004 00000000 	    .long   Reset_Handler                                   /* Reset Handler */
+  49 0008 00000000 	    .long   NMI_Handler                                     /* NMI Handler*/
+  50 000c 00000000 	    .long   HardFault_Handler                               /* Hard Fault Handler*/
+  51 0010 00000000 	    .long   MemManage_Handler                               /* MPU Fault Handler*/
+  52 0014 00000000 	    .long   BusFault_Handler                                /* Bus Fault Handler*/
+  53 0018 00000000 	    .long   UsageFault_Handler                              /* Usage Fault Handler*/
+  54 001c 00000000 	    .long   0                                               /* Reserved*/
+  55 0020 00000000 	    .long   0                                               /* Reserved*/
+  56 0024 00000000 	    .long   0                                               /* Reserved*/
+  57 0028 00000000 	    .long   0                                               /* Reserved*/
+  58 002c 00000000 	    .long   SVC_Handler                                     /* SVCall Handler*/
+  59 0030 00000000 	    .long   DebugMon_Handler                                /* Debug Monitor Handler*/
+  60 0034 00000000 	    .long   0                                               /* Reserved*/
+  61 0038 00000000 	    .long   PendSV_Handler                                  /* PendSV Handler*/
+  62 003c 00000000 	    .long   SysTick_Handler                                 /* SysTick Handler*/
+  63              	
+  64              	                                                            /* External Interrupts*/
+  65 0040 00000000 	    .long   DMA0_IRQHandler                                 /* DMA Channel 0 Transfer Complete*/
+  66 0044 00000000 	    .long   DMA1_IRQHandler                                 /* DMA Channel 1 Transfer Complete*/
+  67 0048 00000000 	    .long   DMA2_IRQHandler                                 /* DMA Channel 2 Transfer Complete*/
+  68 004c 00000000 	    .long   DMA3_IRQHandler                                 /* DMA Channel 3 Transfer Complete*/
+  69 0050 00000000 	    .long   DMA4_IRQHandler                                 /* DMA Channel 4 Transfer Complete*/
+  70 0054 00000000 	    .long   DMA5_IRQHandler                                 /* DMA Channel 5 Transfer Complete*/
+  71 0058 00000000 	    .long   DMA6_IRQHandler                                 /* DMA Channel 6 Transfer Complete*/
+  72 005c 00000000 	    .long   DMA7_IRQHandler                                 /* DMA Channel 7 Transfer Complete*/
+  73 0060 00000000 	    .long   DMA8_IRQHandler                                 /* DMA Channel 8 Transfer Complete*/
+  74 0064 00000000 	    .long   DMA9_IRQHandler                                 /* DMA Channel 9 Transfer Complete*/
+  75 0068 00000000 	    .long   DMA10_IRQHandler                                /* DMA Channel 10 Transfer Complete*/
+  76 006c 00000000 	    .long   DMA11_IRQHandler                                /* DMA Channel 11 Transfer Complete*/
+  77 0070 00000000 	    .long   DMA12_IRQHandler                                /* DMA Channel 12 Transfer Complete*/
+  78 0074 00000000 	    .long   DMA13_IRQHandler                                /* DMA Channel 13 Transfer Complete*/
+  79 0078 00000000 	    .long   DMA14_IRQHandler                                /* DMA Channel 14 Transfer Complete*/
+  80 007c 00000000 	    .long   DMA15_IRQHandler                                /* DMA Channel 15 Transfer Complete*/
+  81 0080 00000000 	    .long   DMA_Error_IRQHandler                            /* DMA Error Interrupt*/
+  82 0084 00000000 	    .long   MCM_IRQHandler                                  /* Normal Interrupt*/
+  83 0088 00000000 	    .long   FTF_IRQHandler                                  /* FTFA Command complete interrupt*/
+  84 008c 00000000 	    .long   Read_Collision_IRQHandler                       /* Read Collision Interrupt*/
+  85 0090 00000000 	    .long   LVD_LVW_IRQHandler                              /* Low Voltage Detect, Low Voltage Warn
+  86 0094 00000000 	    .long   LLWU_IRQHandler                                 /* Low Leakage Wakeup Unit*/
+  87 0098 00000000 	    .long   WDOG_EWM_IRQHandler                             /* WDOG Interrupt*/
+  88 009c 00000000 	    .long   RNG_IRQHandler                                  /* RNG Interrupt*/
+  89 00a0 00000000 	    .long   I2C0_IRQHandler                                 /* I2C0 interrupt*/
+  90 00a4 00000000 	    .long   I2C1_IRQHandler                                 /* I2C1 interrupt*/
+  91 00a8 00000000 	    .long   SPI0_IRQHandler                                 /* SPI0 Interrupt*/
+  92 00ac 00000000 	    .long   SPI1_IRQHandler                                 /* SPI1 Interrupt*/
+  93 00b0 00000000 	    .long   I2S0_Tx_IRQHandler                              /* I2S0 transmit interrupt*/
+  94 00b4 00000000 	    .long   I2S0_Rx_IRQHandler                              /* I2S0 receive interrupt*/
+  95 00b8 00000000 	    .long   LPUART0_IRQHandler                              /* LPUART0 status/error interrupt*/
+  96 00bc 00000000 	    .long   UART0_RX_TX_IRQHandler                          /* UART0 Receive/Transmit interrupt*/
+  97 00c0 00000000 	    .long   UART0_ERR_IRQHandler                            /* UART0 Error interrupt*/
+  98 00c4 00000000 	    .long   UART1_RX_TX_IRQHandler                          /* UART1 Receive/Transmit interrupt*/
+  99 00c8 00000000 	    .long   UART1_ERR_IRQHandler                            /* UART1 Error interrupt*/
+ 100 00cc 00000000 	    .long   UART2_RX_TX_IRQHandler                          /* UART2 Receive/Transmit interrupt*/
+ 101 00d0 00000000 	    .long   UART2_ERR_IRQHandler                            /* UART2 Error interrupt*/
+ 102 00d4 00000000 	    .long   Reserved53_IRQHandler                           /* Reserved interrupt 53*/
+ 103 00d8 00000000 	    .long   Reserved54_IRQHandler                           /* Reserved interrupt 54*/
+ 104 00dc 00000000 	    .long   ADC0_IRQHandler                                 /* ADC0 interrupt*/
+ 105 00e0 00000000 	    .long   CMP0_IRQHandler                                 /* CMP0 interrupt*/
+ 106 00e4 00000000 	    .long   CMP1_IRQHandler                                 /* CMP1 interrupt*/
+ 107 00e8 00000000 	    .long   FTM0_IRQHandler                                 /* FTM0 fault, overflow and channels in
+ 108 00ec 00000000 	    .long   FTM1_IRQHandler                                 /* FTM1 fault, overflow and channels in
+ 109 00f0 00000000 	    .long   FTM2_IRQHandler                                 /* FTM2 fault, overflow and channels in
+ 110 00f4 00000000 	    .long   Reserved61_IRQHandler                           /* Reserved interrupt 61*/
+ 111 00f8 00000000 	    .long   RTC_IRQHandler                                  /* RTC interrupt*/
+ 112 00fc 00000000 	    .long   RTC_Seconds_IRQHandler                          /* RTC seconds interrupt*/
+ 113 0100 00000000 	    .long   PIT0_IRQHandler                                 /* PIT timer channel 0 interrupt*/
+ 114 0104 00000000 	    .long   PIT1_IRQHandler                                 /* PIT timer channel 1 interrupt*/
+ 115 0108 00000000 	    .long   PIT2_IRQHandler                                 /* PIT timer channel 2 interrupt*/
+ 116 010c 00000000 	    .long   PIT3_IRQHandler                                 /* PIT timer channel 3 interrupt*/
+ 117 0110 00000000 	    .long   PDB0_IRQHandler                                 /* PDB0 Interrupt*/
+ 118 0114 00000000 	    .long   USB0_IRQHandler                                 /* USB0 interrupt*/
+ 119 0118 00000000 	    .long   Reserved70_IRQHandler                           /* Reserved interrupt 70*/
+ 120 011c 00000000 	    .long   Reserved71_IRQHandler                           /* Reserved interrupt 71*/
+ 121 0120 00000000 	    .long   DAC0_IRQHandler                                 /* DAC0 interrupt*/
+ 122 0124 00000000 	    .long   MCG_IRQHandler                                  /* MCG Interrupt*/
+ 123 0128 00000000 	    .long   LPTMR0_IRQHandler                               /* LPTimer interrupt*/
+ 124 012c 00000000 	    .long   PORTA_IRQHandler                                /* Port A interrupt*/
+ 125 0130 00000000 	    .long   PORTB_IRQHandler                                /* Port B interrupt*/
+ 126 0134 00000000 	    .long   PORTC_IRQHandler                                /* Port C interrupt*/
+ 127 0138 00000000 	    .long   PORTD_IRQHandler                                /* Port D interrupt*/
+ 128 013c 00000000 	    .long   PORTE_IRQHandler                                /* Port E interrupt*/
+ 129 0140 00000000 	    .long   SWI_IRQHandler                                  /* Software interrupt*/
+ 130 0144 00000000 	    .long   Reserved81_IRQHandler                           /* Reserved interrupt 81*/
+ 131 0148 00000000 	    .long   Reserved82_IRQHandler                           /* Reserved interrupt 82*/
+ 132 014c 00000000 	    .long   Reserved83_IRQHandler                           /* Reserved interrupt 83*/
+ 133 0150 00000000 	    .long   Reserved84_IRQHandler                           /* Reserved interrupt 84*/
+ 134 0154 00000000 	    .long   Reserved85_IRQHandler                           /* Reserved interrupt 85*/
+ 135 0158 00000000 	    .long   Reserved86_IRQHandler                           /* Reserved interrupt 86*/
+ 136 015c 00000000 	    .long   FTM3_IRQHandler                                 /* FTM3 fault, overflow and channels in
+ 137 0160 00000000 	    .long   DAC1_IRQHandler                                 /* DAC1 interrupt*/
+ 138 0164 00000000 	    .long   ADC1_IRQHandler                                 /* ADC1 interrupt*/
+ 139 0168 00000000 	    .long   Reserved90_IRQHandler                           /* Reserved Interrupt 90*/
+ 140 016c 00000000 	    .long   Reserved91_IRQHandler                           /* Reserved Interrupt 91*/
+ 141 0170 00000000 	    .long   Reserved92_IRQHandler                           /* Reserved Interrupt 92*/
+ 142 0174 00000000 	    .long   Reserved93_IRQHandler                           /* Reserved Interrupt 93*/
+ 143 0178 00000000 	    .long   Reserved94_IRQHandler                           /* Reserved Interrupt 94*/
+ 144 017c 00000000 	    .long   Reserved95_IRQHandler                           /* Reserved Interrupt 95*/
+ 145 0180 00000000 	    .long   Reserved96_IRQHandler                           /* Reserved Interrupt 96*/
+ 146 0184 00000000 	    .long   Reserved97_IRQHandler                           /* Reserved Interrupt 97*/
+ 147 0188 00000000 	    .long   Reserved98_IRQHandler                           /* Reserved Interrupt 98*/
+ 148 018c 00000000 	    .long   Reserved99_IRQHandler                           /* Reserved Interrupt 99*/
+ 149 0190 00000000 	    .long   Reserved100_IRQHandler                          /* Reserved Interrupt 100*/
+ 150 0194 00000000 	    .long   Reserved101_IRQHandler                          /* Reserved Interrupt 101*/
+ 151 0198 00000000 	    .long   DefaultISR                                      /* 102*/
+ 152 019c 00000000 	    .long   DefaultISR                                      /* 103*/
+ 153 01a0 00000000 	    .long   DefaultISR                                      /* 104*/
+ 154 01a4 00000000 	    .long   DefaultISR                                      /* 105*/
+ 155 01a8 00000000 	    .long   DefaultISR                                      /* 106*/
+ 156 01ac 00000000 	    .long   DefaultISR                                      /* 107*/
+ 157 01b0 00000000 	    .long   DefaultISR                                      /* 108*/
+ 158 01b4 00000000 	    .long   DefaultISR                                      /* 109*/
+ 159 01b8 00000000 	    .long   DefaultISR                                      /* 110*/
+ 160 01bc 00000000 	    .long   DefaultISR                                      /* 111*/
+ 161 01c0 00000000 	    .long   DefaultISR                                      /* 112*/
+ 162 01c4 00000000 	    .long   DefaultISR                                      /* 113*/
+ 163 01c8 00000000 	    .long   DefaultISR                                      /* 114*/
+ 164 01cc 00000000 	    .long   DefaultISR                                      /* 115*/
+ 165 01d0 00000000 	    .long   DefaultISR                                      /* 116*/
+ 166 01d4 00000000 	    .long   DefaultISR                                      /* 117*/
+ 167 01d8 00000000 	    .long   DefaultISR                                      /* 118*/
+ 168 01dc 00000000 	    .long   DefaultISR                                      /* 119*/
+ 169 01e0 00000000 	    .long   DefaultISR                                      /* 120*/
+ 170 01e4 00000000 	    .long   DefaultISR                                      /* 121*/
+ 171 01e8 00000000 	    .long   DefaultISR                                      /* 122*/
+ 172 01ec 00000000 	    .long   DefaultISR                                      /* 123*/
+ 173 01f0 00000000 	    .long   DefaultISR                                      /* 124*/
+ 174 01f4 00000000 	    .long   DefaultISR                                      /* 125*/
+ 175 01f8 00000000 	    .long   DefaultISR                                      /* 126*/
+ 176 01fc 00000000 	    .long   DefaultISR                                      /* 127*/
+ 177 0200 00000000 	    .long   DefaultISR                                      /* 128*/
+ 178 0204 00000000 	    .long   DefaultISR                                      /* 129*/
+ 179 0208 00000000 	    .long   DefaultISR                                      /* 130*/
+ 180 020c 00000000 	    .long   DefaultISR                                      /* 131*/
+ 181 0210 00000000 	    .long   DefaultISR                                      /* 132*/
+ 182 0214 00000000 	    .long   DefaultISR                                      /* 133*/
+ 183 0218 00000000 	    .long   DefaultISR                                      /* 134*/
+ 184 021c 00000000 	    .long   DefaultISR                                      /* 135*/
+ 185 0220 00000000 	    .long   DefaultISR                                      /* 136*/
+ 186 0224 00000000 	    .long   DefaultISR                                      /* 137*/
+ 187 0228 00000000 	    .long   DefaultISR                                      /* 138*/
+ 188 022c 00000000 	    .long   DefaultISR                                      /* 139*/
+ 189 0230 00000000 	    .long   DefaultISR                                      /* 140*/
+ 190 0234 00000000 	    .long   DefaultISR                                      /* 141*/
+ 191 0238 00000000 	    .long   DefaultISR                                      /* 142*/
+ 192 023c 00000000 	    .long   DefaultISR                                      /* 143*/
+ 193 0240 00000000 	    .long   DefaultISR                                      /* 144*/
+ 194 0244 00000000 	    .long   DefaultISR                                      /* 145*/
+ 195 0248 00000000 	    .long   DefaultISR                                      /* 146*/
+ 196 024c 00000000 	    .long   DefaultISR                                      /* 147*/
+ 197 0250 00000000 	    .long   DefaultISR                                      /* 148*/
+ 198 0254 00000000 	    .long   DefaultISR                                      /* 149*/
+ 199 0258 00000000 	    .long   DefaultISR                                      /* 150*/
+ 200 025c 00000000 	    .long   DefaultISR                                      /* 151*/
+ 201 0260 00000000 	    .long   DefaultISR                                      /* 152*/
+ 202 0264 00000000 	    .long   DefaultISR                                      /* 153*/
+ 203 0268 00000000 	    .long   DefaultISR                                      /* 154*/
+ 204 026c 00000000 	    .long   DefaultISR                                      /* 155*/
+ 205 0270 00000000 	    .long   DefaultISR                                      /* 156*/
+ 206 0274 00000000 	    .long   DefaultISR                                      /* 157*/
+ 207 0278 00000000 	    .long   DefaultISR                                      /* 158*/
+ 208 027c 00000000 	    .long   DefaultISR                                      /* 159*/
+ 209 0280 00000000 	    .long   DefaultISR                                      /* 160*/
+ 210 0284 00000000 	    .long   DefaultISR                                      /* 161*/
+ 211 0288 00000000 	    .long   DefaultISR                                      /* 162*/
+ 212 028c 00000000 	    .long   DefaultISR                                      /* 163*/
+ 213 0290 00000000 	    .long   DefaultISR                                      /* 164*/
+ 214 0294 00000000 	    .long   DefaultISR                                      /* 165*/
+ 215 0298 00000000 	    .long   DefaultISR                                      /* 166*/
+ 216 029c 00000000 	    .long   DefaultISR                                      /* 167*/
+ 217 02a0 00000000 	    .long   DefaultISR                                      /* 168*/
+ 218 02a4 00000000 	    .long   DefaultISR                                      /* 169*/
+ 219 02a8 00000000 	    .long   DefaultISR                                      /* 170*/
+ 220 02ac 00000000 	    .long   DefaultISR                                      /* 171*/
+ 221 02b0 00000000 	    .long   DefaultISR                                      /* 172*/
+ 222 02b4 00000000 	    .long   DefaultISR                                      /* 173*/
+ 223 02b8 00000000 	    .long   DefaultISR                                      /* 174*/
+ 224 02bc 00000000 	    .long   DefaultISR                                      /* 175*/
+ 225 02c0 00000000 	    .long   DefaultISR                                      /* 176*/
+ 226 02c4 00000000 	    .long   DefaultISR                                      /* 177*/
+ 227 02c8 00000000 	    .long   DefaultISR                                      /* 178*/
+ 228 02cc 00000000 	    .long   DefaultISR                                      /* 179*/
+ 229 02d0 00000000 	    .long   DefaultISR                                      /* 180*/
+ 230 02d4 00000000 	    .long   DefaultISR                                      /* 181*/
+ 231 02d8 00000000 	    .long   DefaultISR                                      /* 182*/
+ 232 02dc 00000000 	    .long   DefaultISR                                      /* 183*/
+ 233 02e0 00000000 	    .long   DefaultISR                                      /* 184*/
+ 234 02e4 00000000 	    .long   DefaultISR                                      /* 185*/
+ 235 02e8 00000000 	    .long   DefaultISR                                      /* 186*/
+ 236 02ec 00000000 	    .long   DefaultISR                                      /* 187*/
+ 237 02f0 00000000 	    .long   DefaultISR                                      /* 188*/
+ 238 02f4 00000000 	    .long   DefaultISR                                      /* 189*/
+ 239 02f8 00000000 	    .long   DefaultISR                                      /* 190*/
+ 240 02fc 00000000 	    .long   DefaultISR                                      /* 191*/
+ 241 0300 00000000 	    .long   DefaultISR                                      /* 192*/
+ 242 0304 00000000 	    .long   DefaultISR                                      /* 193*/
+ 243 0308 00000000 	    .long   DefaultISR                                      /* 194*/
+ 244 030c 00000000 	    .long   DefaultISR                                      /* 195*/
+ 245 0310 00000000 	    .long   DefaultISR                                      /* 196*/
+ 246 0314 00000000 	    .long   DefaultISR                                      /* 197*/
+ 247 0318 00000000 	    .long   DefaultISR                                      /* 198*/
+ 248 031c 00000000 	    .long   DefaultISR                                      /* 199*/
+ 249 0320 00000000 	    .long   DefaultISR                                      /* 200*/
+ 250 0324 00000000 	    .long   DefaultISR                                      /* 201*/
+ 251 0328 00000000 	    .long   DefaultISR                                      /* 202*/
+ 252 032c 00000000 	    .long   DefaultISR                                      /* 203*/
+ 253 0330 00000000 	    .long   DefaultISR                                      /* 204*/
+ 254 0334 00000000 	    .long   DefaultISR                                      /* 205*/
+ 255 0338 00000000 	    .long   DefaultISR                                      /* 206*/
+ 256 033c 00000000 	    .long   DefaultISR                                      /* 207*/
+ 257 0340 00000000 	    .long   DefaultISR                                      /* 208*/
+ 258 0344 00000000 	    .long   DefaultISR                                      /* 209*/
+ 259 0348 00000000 	    .long   DefaultISR                                      /* 210*/
+ 260 034c 00000000 	    .long   DefaultISR                                      /* 211*/
+ 261 0350 00000000 	    .long   DefaultISR                                      /* 212*/
+ 262 0354 00000000 	    .long   DefaultISR                                      /* 213*/
+ 263 0358 00000000 	    .long   DefaultISR                                      /* 214*/
+ 264 035c 00000000 	    .long   DefaultISR                                      /* 215*/
+ 265 0360 00000000 	    .long   DefaultISR                                      /* 216*/
+ 266 0364 00000000 	    .long   DefaultISR                                      /* 217*/
+ 267 0368 00000000 	    .long   DefaultISR                                      /* 218*/
+ 268 036c 00000000 	    .long   DefaultISR                                      /* 219*/
+ 269 0370 00000000 	    .long   DefaultISR                                      /* 220*/
+ 270 0374 00000000 	    .long   DefaultISR                                      /* 221*/
+ 271 0378 00000000 	    .long   DefaultISR                                      /* 222*/
+ 272 037c 00000000 	    .long   DefaultISR                                      /* 223*/
+ 273 0380 00000000 	    .long   DefaultISR                                      /* 224*/
+ 274 0384 00000000 	    .long   DefaultISR                                      /* 225*/
+ 275 0388 00000000 	    .long   DefaultISR                                      /* 226*/
+ 276 038c 00000000 	    .long   DefaultISR                                      /* 227*/
+ 277 0390 00000000 	    .long   DefaultISR                                      /* 228*/
+ 278 0394 00000000 	    .long   DefaultISR                                      /* 229*/
+ 279 0398 00000000 	    .long   DefaultISR                                      /* 230*/
+ 280 039c 00000000 	    .long   DefaultISR                                      /* 231*/
+ 281 03a0 00000000 	    .long   DefaultISR                                      /* 232*/
+ 282 03a4 00000000 	    .long   DefaultISR                                      /* 233*/
+ 283 03a8 00000000 	    .long   DefaultISR                                      /* 234*/
+ 284 03ac 00000000 	    .long   DefaultISR                                      /* 235*/
+ 285 03b0 00000000 	    .long   DefaultISR                                      /* 236*/
+ 286 03b4 00000000 	    .long   DefaultISR                                      /* 237*/
+ 287 03b8 00000000 	    .long   DefaultISR                                      /* 238*/
+ 288 03bc 00000000 	    .long   DefaultISR                                      /* 239*/
+ 289 03c0 00000000 	    .long   DefaultISR                                      /* 240*/
+ 290 03c4 00000000 	    .long   DefaultISR                                      /* 241*/
+ 291 03c8 00000000 	    .long   DefaultISR                                      /* 242*/
+ 292 03cc 00000000 	    .long   DefaultISR                                      /* 243*/
+ 293 03d0 00000000 	    .long   DefaultISR                                      /* 244*/
+ 294 03d4 00000000 	    .long   DefaultISR                                      /* 245*/
+ 295 03d8 00000000 	    .long   DefaultISR                                      /* 246*/
+ 296 03dc 00000000 	    .long   DefaultISR                                      /* 247*/
+ 297 03e0 00000000 	    .long   DefaultISR                                      /* 248*/
+ 298 03e4 00000000 	    .long   DefaultISR                                      /* 249*/
+ 299 03e8 00000000 	    .long   DefaultISR                                      /* 250*/
+ 300 03ec 00000000 	    .long   DefaultISR                                      /* 251*/
+ 301 03f0 00000000 	    .long   DefaultISR                                      /* 252*/
+ 302 03f4 00000000 	    .long   DefaultISR                                      /* 253*/
+ 303 03f8 00000000 	    .long   DefaultISR                                      /* 254*/
+ 304 03fc FFFFFFFF 	    .long   0xFFFFFFFF                                      /*  Reserved for user TRIM value*/
+ 305              	
+ 307              	
+ 308              	/* Flash Configuration */
+ 309              	    .section .FlashConfig, "a"
+ 310 0000 FFFFFFFF 	    .long 0xFFFFFFFF
+ 311 0004 FFFFFFFF 	    .long 0xFFFFFFFF
+ 312 0008 FFFFFFFF 	    .long 0xFFFFFFFF
+ 313 000c FEFFFFFF 	    .long 0xFFFFFFFE
+ 314              	
+ 315              	    .text
+ 316              	    .thumb
+ 317              	
+ 318              	/* Reset Handler */
+ 319              	
+ 320              	    .thumb_func
+ 321              	    .align 2
+ 322              	    .globl   Reset_Handler
+ 323              	    .weak    Reset_Handler
+ 325              	Reset_Handler:
+ 326 0000 72B6     	    cpsid   i               /* Mask interrupts */
+ 327              	#ifndef __NO_SYSTEM_INIT
+ 328 0002 FFF7FEFF 	    bl SystemInit
+ 329              	#endif
+ 330 0006 62B6     	    cpsie   i               /* Unmask interrupts */
+ 331              	/*     Loop to copy data from read only memory to RAM. The ranges
+ 332              	 *      of copy from/to are specified by following symbols evaluated in
+ 333              	 *      linker script.
+ 334              	 *      __etext: End of code section, i.e., begin of data sections to copy from.
+ 335              	 *      __data_start__/__data_end__: RAM address range that data should be
+ 336              	 *      copied to. Both must be aligned to 4 bytes boundary.  */
+ 337              	
+ 338 0008 0549     	    ldr    r1, =__etext
+ 339 000a 064A     	    ldr    r2, =__data_start__
+ 340 000c 064B     	    ldr    r3, =__data_end__
+ 341              	
+ 342              	#if 1
+ 343              	/* Here are two copies of loop implemenations. First one favors code size
+ 344              	 * and the second one favors performance. Default uses the first one.
+ 345              	 * Change to "#if 0" to use the second one */
+ 346              	.LC0:
+ 347 000e 9A42     	    cmp     r2, r3
+ 348 0010 BEBF     	    ittt    lt
+ 349 0012 51F8040B 	    ldrlt   r0, [r1], #4
+ 350 0016 42F8040B 	    strlt   r0, [r2], #4
+ 351 001a F8E7     	    blt    .LC0
+ 352              	#else
+ 353              	    subs    r3, r2
+ 354              	    ble    .LC1
+ 355              	.LC0:
+ 356              	    subs    r3, #4
+ 357              	    ldr    r0, [r1, r3]
+ 358              	    str    r0, [r2, r3]
+ 359              	    bgt    .LC0
+ 360              	.LC1:
+ 361              	#endif
+ 362              	
+ 363              	#ifdef __STARTUP_CLEAR_BSS
+ 364              	/*     This part of work usually is done in C library startup code. Otherwise,
+ 365              	 *     define this macro to enable it in this startup.
+ 366              	 *
+ 367              	 *     Loop to zero out BSS section, which uses following symbols
+ 368              	 *     in linker script:
+ 369              	 *      __bss_start__: start of BSS section. Must align to 4
+ 370              	 *      __bss_end__: end of BSS section. Must align to 4
+ 371              	 */
+ 372              	    ldr r1, =__bss_start__
+ 373              	    ldr r2, =__bss_end__
+ 374              	
+ 375              	    movs    r0, 0
+ 376              	.LC2:
+ 377              	    cmp     r1, r2
+ 378              	    itt    lt
+ 379              	    strlt   r0, [r1], #4
+ 380              	    blt    .LC2
+ 381              	#endif /* __STARTUP_CLEAR_BSS */
+ 382              	
+ 383              	#ifndef __START
+ 384              	#define __START _start
+ 385              	#endif
+ 386 001c FFF7FEFF 	    bl    __START
+ 387 0020 00000000 	    .pool
+ 387      00000000 
+ 387      00000000 
+ 389              	
+ 390              	    .align	1
+ 391              	    .thumb_func
+ 392              	    .weak DefaultISR
+ 394              	DefaultISR:
+ 395 002c FFF7FEBF 	    b	DefaultISR
+ 397              	
+ 398              	/*    Macro to define default handlers. Default handler
+ 399              	 *    will be weak symbol and just dead loops. They can be
+ 400              	 *    overwritten by other handlers */
+ 401              	    .macro def_irq_handler	handler_name
+ 402              	    .weak \handler_name
+ 403              	    .set  \handler_name, DefaultISR
+ 404              	    .endm
+ 405              	
+ 406              	/* Exception Handlers */
+ 407              	    def_irq_handler    NMI_Handler
+ 408              	    def_irq_handler    HardFault_Handler
+ 409              	    def_irq_handler    MemManage_Handler
+ 410              	    def_irq_handler    BusFault_Handler
+ 411              	    def_irq_handler    UsageFault_Handler
+ 412              	    def_irq_handler    SVC_Handler
+ 413              	    def_irq_handler    DebugMon_Handler
+ 414              	    def_irq_handler    PendSV_Handler
+ 415              	    def_irq_handler    SysTick_Handler
+ 416              	    def_irq_handler    DMA0_IRQHandler
+ 417              	    def_irq_handler    DMA1_IRQHandler
+ 418              	    def_irq_handler    DMA2_IRQHandler
+ 419              	    def_irq_handler    DMA3_IRQHandler
+ 420              	    def_irq_handler    DMA4_IRQHandler
+ 421              	    def_irq_handler    DMA5_IRQHandler
+ 422              	    def_irq_handler    DMA6_IRQHandler
+ 423              	    def_irq_handler    DMA7_IRQHandler
+ 424              	    def_irq_handler    DMA8_IRQHandler
+ 425              	    def_irq_handler    DMA9_IRQHandler
+ 426              	    def_irq_handler    DMA10_IRQHandler
+ 427              	    def_irq_handler    DMA11_IRQHandler
+ 428              	    def_irq_handler    DMA12_IRQHandler
+ 429              	    def_irq_handler    DMA13_IRQHandler
+ 430              	    def_irq_handler    DMA14_IRQHandler
+ 431              	    def_irq_handler    DMA15_IRQHandler
+ 432              	    def_irq_handler    DMA_Error_IRQHandler
+ 433              	    def_irq_handler    MCM_IRQHandler
+ 434              	    def_irq_handler    FTF_IRQHandler
+ 435              	    def_irq_handler    Read_Collision_IRQHandler
+ 436              	    def_irq_handler    LVD_LVW_IRQHandler
+ 437              	    def_irq_handler    LLWU_IRQHandler
+ 438              	    def_irq_handler    WDOG_EWM_IRQHandler
+ 439              	    def_irq_handler    RNG_IRQHandler
+ 440              	    def_irq_handler    I2C0_IRQHandler
+ 441              	    def_irq_handler    I2C1_IRQHandler
+ 442              	    def_irq_handler    SPI0_IRQHandler
+ 443              	    def_irq_handler    SPI1_IRQHandler
+ 444              	    def_irq_handler    I2S0_Tx_IRQHandler
+ 445              	    def_irq_handler    I2S0_Rx_IRQHandler
+ 446              	    def_irq_handler    LPUART0_IRQHandler
+ 447              	    def_irq_handler    UART0_RX_TX_IRQHandler
+ 448              	    def_irq_handler    UART0_ERR_IRQHandler
+ 449              	    def_irq_handler    UART1_RX_TX_IRQHandler
+ 450              	    def_irq_handler    UART1_ERR_IRQHandler
+ 451              	    def_irq_handler    UART2_RX_TX_IRQHandler
+ 452              	    def_irq_handler    UART2_ERR_IRQHandler
+ 453              	    def_irq_handler    Reserved53_IRQHandler
+ 454              	    def_irq_handler    Reserved54_IRQHandler
+ 455              	    def_irq_handler    ADC0_IRQHandler
+ 456              	    def_irq_handler    CMP0_IRQHandler
+ 457              	    def_irq_handler    CMP1_IRQHandler
+ 458              	    def_irq_handler    FTM0_IRQHandler
+ 459              	    def_irq_handler    FTM1_IRQHandler
+ 460              	    def_irq_handler    FTM2_IRQHandler
+ 461              	    def_irq_handler    Reserved61_IRQHandler
+ 462              	    def_irq_handler    RTC_IRQHandler
+ 463              	    def_irq_handler    RTC_Seconds_IRQHandler
+ 464              	    def_irq_handler    PIT0_IRQHandler
+ 465              	    def_irq_handler    PIT1_IRQHandler
+ 466              	    def_irq_handler    PIT2_IRQHandler
+ 467              	    def_irq_handler    PIT3_IRQHandler
+ 468              	    def_irq_handler    PDB0_IRQHandler
+ 469              	    def_irq_handler    USB0_IRQHandler
+ 470              	    def_irq_handler    Reserved70_IRQHandler
+ 471              	    def_irq_handler    Reserved71_IRQHandler
+ 472              	    def_irq_handler    DAC0_IRQHandler
+ 473              	    def_irq_handler    MCG_IRQHandler
+ 474              	    def_irq_handler    LPTMR0_IRQHandler
+ 475              	    def_irq_handler    PORTA_IRQHandler
+ 476              	    def_irq_handler    PORTB_IRQHandler
+ 477              	    def_irq_handler    PORTC_IRQHandler
+ 478              	    def_irq_handler    PORTD_IRQHandler
+ 479              	    def_irq_handler    PORTE_IRQHandler
+ 480              	    def_irq_handler    SWI_IRQHandler
+ 481              	    def_irq_handler    Reserved81_IRQHandler
+ 482              	    def_irq_handler    Reserved82_IRQHandler
+ 483              	    def_irq_handler    Reserved83_IRQHandler
+ 484              	    def_irq_handler    Reserved84_IRQHandler
+ 485              	    def_irq_handler    Reserved85_IRQHandler
+ 486              	    def_irq_handler    Reserved86_IRQHandler
+ 487              	    def_irq_handler    FTM3_IRQHandler
+ 488              	    def_irq_handler    DAC1_IRQHandler
+ 489              	    def_irq_handler    ADC1_IRQHandler
+ 490              	    def_irq_handler    Reserved90_IRQHandler
+ 491              	    def_irq_handler    Reserved91_IRQHandler
+ 492              	    def_irq_handler    Reserved92_IRQHandler
+ 493              	    def_irq_handler    Reserved93_IRQHandler
+ 494              	    def_irq_handler    Reserved94_IRQHandler
+ 495              	    def_irq_handler    Reserved95_IRQHandler
+ 496              	    def_irq_handler    Reserved96_IRQHandler
+ 497              	    def_irq_handler    Reserved97_IRQHandler
+ 498              	    def_irq_handler    Reserved98_IRQHandler
+ 499              	    def_irq_handler    Reserved99_IRQHandler
+ 500              	    def_irq_handler    Reserved100_IRQHandler
+ 501              	    def_irq_handler    Reserved101_IRQHandler
+ 502              	
+ 503              	    .end
+DEFINED SYMBOLS
+../Project_Settings/Startup_Code/startup_MK22F51212.S:44     .isr_vector:00000000 $d
+../Project_Settings/Startup_Code/startup_MK22F51212.S:46     .isr_vector:00000000 __isr_vector
+../Project_Settings/Startup_Code/startup_MK22F51212.S:325    .text:00000000 Reset_Handler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c NMI_Handler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c HardFault_Handler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c MemManage_Handler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c BusFault_Handler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c UsageFault_Handler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c SVC_Handler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c DebugMon_Handler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c PendSV_Handler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c SysTick_Handler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c DMA0_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c DMA1_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c DMA2_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c DMA3_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c DMA4_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c DMA5_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c DMA6_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c DMA7_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c DMA8_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c DMA9_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c DMA10_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c DMA11_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c DMA12_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c DMA13_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c DMA14_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c DMA15_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c DMA_Error_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c MCM_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c FTF_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c Read_Collision_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c LVD_LVW_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c LLWU_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c WDOG_EWM_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c RNG_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c I2C0_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c I2C1_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c SPI0_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c SPI1_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c I2S0_Tx_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c I2S0_Rx_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c LPUART0_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c UART0_RX_TX_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c UART0_ERR_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c UART1_RX_TX_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c UART1_ERR_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c UART2_RX_TX_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c UART2_ERR_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c Reserved53_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c Reserved54_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c ADC0_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c CMP0_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c CMP1_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c FTM0_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c FTM1_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c FTM2_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c Reserved61_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c RTC_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c RTC_Seconds_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c PIT0_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c PIT1_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c PIT2_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c PIT3_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c PDB0_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c USB0_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c Reserved70_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c Reserved71_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c DAC0_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c MCG_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c LPTMR0_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c PORTA_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c PORTB_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c PORTC_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c PORTD_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c PORTE_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c SWI_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c Reserved81_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c Reserved82_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c Reserved83_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c Reserved84_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c Reserved85_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c Reserved86_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c FTM3_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c DAC1_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c ADC1_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c Reserved90_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c Reserved91_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c Reserved92_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c Reserved93_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c Reserved94_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c Reserved95_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c Reserved96_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c Reserved97_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c Reserved98_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c Reserved99_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c Reserved100_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c Reserved101_IRQHandler
+../Project_Settings/Startup_Code/startup_MK22F51212.S:394    .text:0000002c DefaultISR
+../Project_Settings/Startup_Code/startup_MK22F51212.S:321    .text:00000000 $t
+../Project_Settings/Startup_Code/startup_MK22F51212.S:387    .text:00000020 $d
+../Project_Settings/Startup_Code/startup_MK22F51212.S:390    .text:0000002c $t
+                   .debug_aranges:0000000c $d
+
+UNDEFINED SYMBOLS
+__StackTop
+SystemInit
+__etext
+__data_start__
+__data_end__
+_start
